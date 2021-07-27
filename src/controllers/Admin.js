@@ -1,27 +1,6 @@
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
-const getAllUsers = async (req, res) => {
-  try {
-    const allUsers = await User.find({});
-    res.json(allUsers);
-  } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
-  }
-};
-
-const getSingleUser = async (req, res) => {
-  try {
-    const singleUser = await User.findOne({_id: req.params.id});
-    
-    res.json(singleUser);
-  } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
-  }
-};
-
 // Update Account Information
 const updateInfo = async (req, res) => {
   try {
@@ -45,4 +24,4 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { updateInfo, changePassword, getAllUsers, getSingleUser };
+module.exports = { updateInfo, changePassword };

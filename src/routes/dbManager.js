@@ -1,10 +1,10 @@
 const router = require("express").Router();
 
 // Import route logic functions from route controller
-const { updateInfo, changePassword } = require("../controllers/Admin");
+const { getAllUsers, getSingleUser } = require("../controllers/dbManager");
 
 // Set routes for Account Administration Operations
-router.patch("/update/:id", updateInfo);
-router.patch("/change-password", changePassword);
+router.get("/getallusers", getAllUsers);
+router.get("/getsingleuser/:id", getSingleUser);
 
 module.exports = router;
