@@ -17,7 +17,7 @@ const authorize = require("./src/middlewares/Authorize"); // Import middleware
 // Import Routes
 const User = require("./src/routes/User");
 const Item = require("./src/routes/Item");
-const Admin = require("./src/routes/Admin");
+const userUpdate = require("./src/routes/userUpdate");
 const dbManager = require("./src/routes/dbManager");
 
 app.use("/inventory/api");
@@ -25,7 +25,7 @@ app.use("/inventory/api");
 // Route Middlewares
 app.use("/user", User);
 app.use("/item", authorize, Item); // Deny access to route
-app.use("/admin", authorize, Admin); // Deny access to route
+app.use("/admin", authorize, userUpdate); // Deny access to route
 app.use("/database", authorize, dbManager); // Deny access to route
 
 console.log("...waiting for database...");
