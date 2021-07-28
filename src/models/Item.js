@@ -31,11 +31,11 @@ const itemSchema = new Schema({
     trim: true,
     default: 0,
   },
-  user: { type: Schema.ObjectId },
   date: {
     type: Date,
     default: Date.now,
   },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 module.exports = mongoose.model("Item", itemSchema);

@@ -1,6 +1,6 @@
 // ITEM CRUD OPERATIONS
-const Item = require("../models/Item");
 const User = require("../models/User");
+const Item = require("../models/Item");
 const itemValidation = require("../validations/Item");
 
 // Get All Items
@@ -14,12 +14,19 @@ const getAllItems = async (req, res) => {
   }
 };
 
+// User
+//    .findOne({_id: userId })
+//    .populate("blogs") // key to populate
+//    .then(user => {
+//       res.json(user);
+//    });
+
 // Get Specific Item
 const getSpecificItem = async (req, res) => {
   try {
-    const user = req.user
-    const getitem = await Item.find({ name: req.body.name }).populate("User");
-    res.json(getitem);
+    const user = await User.findOne({ _id: req.user.id }).populate("item");
+    console.log(req.user.id)
+    res.json(user);
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
