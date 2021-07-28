@@ -6,30 +6,23 @@ const itemValidation = require("../validations/Item");
 // Get All Items
 const getAllItems = async (req, res) => {
   try {
-    const allItems = await Item.find({});
-    res.json(allItems);
+    const items = await Item.find({ user: req.user.id });
+    if (!items) return res.json(`No item found!`)
+    res.json(items);
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
   }
 };
 
-// User
-//    .findOne({_id: userId })
-//    .populate("blogs") // key to populate
-//    .then(user => {
-//       res.json(user);
-//    });
-
 // Get Specific Item
 const getSpecificItem = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id }).populate("item");
-    console.log(req.user.id)
-    res.json(user);
+    const item = await Item.findOne({ user: req.user.id, name: req.params.id });
+    if (!item) return res.json(`${req.params.id} does not exist!`)
+    res.json(item);
   } catch (err) {
     res.status(500).json(err);
-    console.log(err);
   }
 };
 
@@ -43,7 +36,7 @@ const createItem = async (req, res) => {
     // Create item, append user ID and store in database.
     const newItem = new Item({ ...req.body, user: req.user.id });
     await newItem.save();
-    res.json(newItem);
+    res.json({ msg: "New item created.", newItem });
   } catch (err) {
     res.status(500).json(err);
   }

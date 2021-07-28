@@ -66,7 +66,6 @@ const signIn = async (req, res) => {
     msg: "Logged in successfully!",
     userDetails: user,
   });
-  console.log(token)
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= LOG OUT =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -12,7 +12,7 @@ const {
 // Set routes for Items CRUD processes
 router.get("/get", getAllItems);
 router.post("/create", createItem);
-router.get("/getitem", getSpecificItem);
+router.get("/get/:id", getSpecificItem);
 router.put("/:id", updateItem);
 router.delete("/:id", deleteItem);
 
