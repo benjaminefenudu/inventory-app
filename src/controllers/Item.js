@@ -17,8 +17,9 @@ const getAllItems = async (req, res) => {
 // Get Specific Item
 const getSpecificItem = async (req, res) => {
   try {
-    const specificItems = await Item.findOne({});
-    res.json(specificItems);
+    const user = req.user
+    const getitem = await Item.find({ name: req.body.name }).populate("User");
+    res.json(getitem);
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
@@ -32,14 +33,12 @@ const createItem = async (req, res) => {
     const { error } = itemValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const createItem = { item: req.body, user: req.user.id };
-
-    await Item.create(createItem);
-
-    res.status(200).json(createItem);
+    // Create item, append user ID and store in database.
+    const newItem = new Item({ ...req.body, user: req.user.id });
+    await newItem.save();
+    res.json(newItem);
   } catch (err) {
     res.status(500).json(err);
-    console.log(err);
   }
 };
 
@@ -57,7 +56,7 @@ const updateItem = async (req, res) => {
 };
 
 // Delete Item by ID
-const deleteItemById = async (req, res) => {
+const deleteItem = async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);
 
@@ -74,5 +73,5 @@ module.exports = {
   getSpecificItem,
   createItem,
   updateItem,
-  deleteItemById,
+  deleteItem,
 };

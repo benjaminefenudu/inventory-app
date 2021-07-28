@@ -10,9 +10,9 @@ const {
 } = require("../controllers/Item");
 
 // Set routes for Items CRUD processes
-router.get("/", getAllItems);
-router.post("/:id", getSpecificItem);
-router.post("/", createItem);
+router.get("/get", getAllItems);
+router.post("/create", createItem);
+router.get("/getitem", getSpecificItem);
 router.put("/:id", updateItem);
 router.delete("/:id", deleteItem);
 

@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const itemSchema = require("./Item")
-
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -22,7 +20,6 @@ const userSchema = new Schema({
     min: 6,
     max: 255,
     trim: true,
-    default: "",
   },
   businessName: {
     type: String,
@@ -30,6 +27,13 @@ const userSchema = new Schema({
     min: 6,
     max: 255,
     trim: true,
+    default: "",
+  },
+  phoneNo: {
+    type: String,
+    required: true,
+    min: 8,
+    max: 11,
     default: "",
   },
   password: {
@@ -42,11 +46,6 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  item: [itemSchema],
-  // item: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Item",
-  // },
 });
 
 module.exports = mongoose.model("User", userSchema);

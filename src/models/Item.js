@@ -31,18 +31,11 @@ const itemSchema = new Schema({
     trim: true,
     default: 0,
   },
-  URL: {
-    type: String,
-    required: true,
-    min: 6,
-    max: 255,
-    trim: true,
-    default: "",
-  },
+  user: { type: Schema.ObjectId },
   date: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = itemSchema
+module.exports = mongoose.model("Item", itemSchema);

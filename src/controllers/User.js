@@ -25,8 +25,8 @@ const signUp = async (req, res) => {
     password = await bcrypt.hash(req.body.password, 12);
 
     // Create user and store in database
-    const user = { ...req.body, password };
-    await User.create(user);
+    const user = new User({ ...req.body, password });
+    await user.save();
 
     // Return new user details
     res.status(201).json({
@@ -65,8 +65,7 @@ const signIn = async (req, res) => {
     msg: "Logged in successfully!",
     userDetails: user,
   });
-
-  console.log("token: " + token);
+  console.log(token)
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= LOG OUT =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

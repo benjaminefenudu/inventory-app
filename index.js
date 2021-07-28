@@ -20,12 +20,11 @@ const Item = require("./src/routes/Item");
 const userUpdate = require("./src/routes/userUpdate");
 const dbManager = require("./src/routes/dbManager");
 
-app.use("/inventory/api");
-
 // Route Middlewares
 app.use("/user", User);
-app.use("/item", authorize, Item); // Deny access to route
-app.use("/admin", authorize, userUpdate); // Deny access to route
-app.use("/database", authorize, dbManager); // Deny access to route
+
+app.use("/item", authorize, Item);
+app.use("/admin", authorize, userUpdate);
+app.use("/database", authorize, dbManager);
 
 console.log("...waiting for database...");
