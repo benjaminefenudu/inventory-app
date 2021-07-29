@@ -55,6 +55,9 @@ const updateItem = async (req, res) => {
   }
 };
 
+// Upload Image
+// image: req.file.filename
+
 // Delete Item by ID
 const deleteItem = async (req, res) => {
   try {
