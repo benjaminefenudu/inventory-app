@@ -7,7 +7,7 @@ const itemValidation = require("../validations/Item");
 const getAllItems = async (req, res) => {
   try {
     const items = await Item.find({ user: req.user.id });
-    if (!items) return res.json(`No item found!`)
+    if (!items) return res.json(`No item found!`);
     res.json(items);
   } catch (err) {
     res.status(500).json(err);
@@ -19,7 +19,7 @@ const getAllItems = async (req, res) => {
 const getSpecificItem = async (req, res) => {
   try {
     const item = await Item.findOne({ user: req.user.id, name: req.params.id });
-    if (!item) return res.json(`${req.params.id} does not exist!`)
+    if (!item) return res.json(`${req.params.id} does not exist!`);
     res.json(item);
   } catch (err) {
     res.status(500).json(err);
@@ -42,7 +42,7 @@ const createItem = async (req, res) => {
   }
 };
 
-// Update Item
+// Update Item // NOT YET COMPLETED
 const updateItem = async (req, res) => {
   try {
     const item = new Item(req.body);
@@ -55,10 +55,10 @@ const updateItem = async (req, res) => {
   }
 };
 
-// Upload Image
+// Upload Image // WORK IN PROGRESS
 // image: req.file.filename
 
-// Delete Item by ID
+// Delete Item by ID // NOT YET COMPLETED
 const deleteItem = async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);
