@@ -7,7 +7,7 @@ const itemValidation = require("../validations/Item");
 const getAllItems = async (req, res) => {
   try {
     const items = await Item.find({ user: req.user.id });
-    if (!items) return res.json(`No item found!`);
+    if (!items) return res.json({ msg: "No item found!" });
     res.json(items);
   } catch (err) {
     res.status(500).json(err);
@@ -34,9 +34,9 @@ const createItem = async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     // Create item, append user ID and store in database.
-    const newItem = new Item({ ...req.body, user: req.user.id });
-    await newItem.save();
-    res.json({ msg: "New item created.", newItem });
+    const item = new Item({ ...req.body, user: req.user.id });
+    await item.save();
+    res.json({ msg: "New item created.", item });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -45,10 +45,20 @@ const createItem = async (req, res) => {
 // Update Item // NOT YET COMPLETED
 const updateItem = async (req, res) => {
   try {
-    const item = new Item(req.body);
-    const userItem = await User.findOneAndUpdate({ _id: req.params.id });
+    const item = await Item.findOneAndUpdate(
+      { user: req.user.id, _id: req.params.id },
+      { ...req.body }
+    );
+
+    if (!item)
+      return res.status(404).json({ status: "fail", msg: "Item not found!" });
+
     await item.save();
-    res.send(item);
+    res.status(200).json({
+      status: "success",
+      msg: "Item has been updated",
+      item,
+    });
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
@@ -61,10 +71,19 @@ const updateItem = async (req, res) => {
 // Delete Item by ID // NOT YET COMPLETED
 const deleteItem = async (req, res) => {
   try {
-    const item = await Item.findByIdAndDelete(req.params.id);
+    const item = await Item.findByIdAndDelete({
+      user: user.id,
+      _id: req.params.id,
+    });
 
-    if (!item) return res.status(404).send("No item found");
-    res.status(200).send("Item was deleted.");
+    if (!item)
+      return res.status(404).json({ status: "fail", msg: "Item not found" });
+    res
+      .status(200)
+      .json({
+        status: "success",
+        msg: `Item with ID ${_id} succesfully deleted.`,
+      });
   } catch (err) {
     res.status(500).json(err);
     console.log(err);

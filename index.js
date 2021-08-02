@@ -24,7 +24,7 @@ const dbManager = require("./src/routes/dbManager");
 app.use("/user", User);
 
 app.use("/item", authorize, Item);
-app.use("/admin", authorize, userUpdate);
+app.use("/user/profile", authorize, userUpdate);
 app.use("/database", authorize, dbManager);
 
 console.log("...waiting for database...");

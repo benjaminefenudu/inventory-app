@@ -7,7 +7,7 @@ const signUpValidation = (user) => {
     lastName: Joi.string().min(2).max(255).required(),
     email: Joi.string().min(6).required().email(),
     businessName: Joi.string().min(2).max(255).required(),
-    password: Joi.string().min(6).max(40).required(),
+    password: Joi.string().min(8).max(255).required(),
     confirmPassword: Joi.string().required().valid(Joi.ref("password")),
   }).unknown();
 
@@ -27,12 +27,16 @@ const signInValidation = (user) => {
 // =-=-=-=-=-= Password Change Validation =-=-=-=-=-=
 const passwordChangeValidation = (item) => {
   const schema = Joi.object({
-    password: Joi.string().min(6).max(40).required(),
-    confirmPassword: Joi.string().required().valid(Joi.ref("password")),
+    oldPassword: Joi.string().min(6).max(255).required(),
+    newPassword: Joi.string().min(6).max(255).required(),
+    confirmPassword: Joi.string().required().valid(Joi.ref("newPassword")),
   }).unknown();
 
   return schema.validate(item);
 };
 
-
-module.exports = { signUpValidation, signInValidation, passwordChangeValidation };
+module.exports = {
+  signUpValidation,
+  signInValidation,
+  passwordChangeValidation,
+};
