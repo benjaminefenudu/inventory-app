@@ -7,7 +7,8 @@ const itemValidation = require("../validations/Item");
 const getAllItems = async (req, res) => {
   try {
     const items = await Item.find({ user: req.user.id });
-    if (!items) return res.json({ msg: "No item found!" });
+    if (!items)
+      return res.status(404).json({ status: "failed", msg: "No item found!" });
     res.json(items);
   } catch (err) {
     res.status(500).json(err);
@@ -19,7 +20,11 @@ const getAllItems = async (req, res) => {
 const getSpecificItem = async (req, res) => {
   try {
     const item = await Item.findOne({ user: req.user.id, name: req.params.id });
-    if (!item) return res.json(`${req.params.id} does not exist!`);
+    if (!item)
+      return res.status(404).json({
+        status: "failed",
+        msg: `ID ${req.params.id} does not exist!`,
+      });
     res.json(item);
   } catch (err) {
     res.status(500).json(err);
@@ -33,30 +38,54 @@ const createItem = async (req, res) => {
     const { error } = itemValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    // name.trim(), findByName... await...save
+    // Check if item already exists for user
+    req.body.name.trim(); // Trim spaces
+    const itemExists = await Item.findOne({
+      user: req.user.id,
+      name: `${req.body.name}`,
+    });
+    // If item exists, add the new value to noInStock
+    if (itemExists) {
+      itemExists.noInStock =
+        Number(itemExists.noInStock) + Number(req.body.noInStock);
+      await itemExists.save();
+      return res.status(200).json({
+        success: true,
+        msg: "Item exists; noInStock updated",
+        item: itemExists,
+      });
+    } else {
+      // Create item, append user ID and store in database
+      const item = new Item({
+        ...req.body,
+        user: req.user.id,
+        image: `http://localhost:4000/item/image/${req.file.filename}`,
+      });
+      await item.save();
 
-    // Create item, append user ID and store in database.
-    const item = new Item({ ...req.body, user: req.user.id });
-    await item.save();
-    res.json({ msg: "New item created.", item });
+      res
+        .status(201)
+        .json({ status: "failed", msg: "New item created.", item });
+    }
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-// Update Item // NOT YET COMPLETED
+// Update Item
 const updateItem = async (req, res) => {
   try {
-    const item = await Item.findOneAndUpdate(
-      { user: req.user.id, _id: req.params.id },
-      { ...req.body }
-    );
+    let item = await Item.find({ _id: req.params.id, user: req.user.id });
 
     if (!item)
-      return res.status(404).json({ status: "fail", msg: "Item not found!" });
+      return res.status(404).json({ status: "failed", msg: `Item with ID ${_id} not found!` });
 
-    // if (req.user != item.id)
+    item = {
+      ...req.body,
+      image: `http://localhost:4000/item/image/${req.file.filename}`,
+    };
     await item.save();
+
     res.status(200).json({
       status: "success",
       msg: "Item has been updated",
@@ -77,13 +106,11 @@ const deleteItem = async (req, res) => {
     });
 
     if (!item)
-      return res.status(404).json({ status: "fail", msg: "Item not found" });
-    res
-      .status(200)
-      .json({
-        status: "success",
-        msg: `Item with ID ${_id} succesfully deleted.`,
-      });
+      return res.status(404).json({ status: "failed", msg: `Item with ID ${item._id} not found!` });
+    res.status(200).json({
+      status: "success",
+      msg: `Item with ID ${item._id} succesfully deleted.`,
+    });
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
