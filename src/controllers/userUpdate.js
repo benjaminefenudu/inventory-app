@@ -6,7 +6,7 @@ const { passwordChangeValidation } = require("../validations/User");
 // Show Current User Details
 const currentUserDetails = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id });
+    const user = await User.findById(req.user.id);
     res.json(user);
   } catch (err) {
     console.log(err);
@@ -39,33 +39,31 @@ const changePassword = async (req, res) => {
   // validate request body
   const { error } = passwordChangeValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  
+
   // Check if user old password is correct
-  let user = await User.findOne({ _id: req.user.id });
-  const validPassword = await bcrypt.compare(req.body.oldPassword, user.password);
-  if (!validPassword) return res.status(400).json({ success: false, msg: "Invalid Old Password." });
+  let user = await User.findById(req.user.id);
+  const validPassword = await bcrypt.compare(
+    req.body.oldPassword,
+    user.password
+  );
+  if (!validPassword)
+    return res.status(400).json({
+      success: false,
+      msg: "Invalid Old Password.",
+    });
 
   // Hash new password and replace
-  newPassword = await bcrypt.hash(req.body.newPassword, 12);
-  user.password = newPassword;
+  const password = await bcrypt.hash(req.body.newPassword, 12);
 
-  user = await User.findOneAndUpdate(
-    { _id: req.user.id },
-    { password: user.password },
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res
-          .status(200)
-          .json({
-            status: "success",
-            msg: "Your password has been updated!",
-            result,
-          });
-      }
-    }
-  );
+  user = await User.findById(req.user.id);
+  user.password = password;
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    msg: "Your password has been updated!",
+    result,
+  });
 };
 
 module.exports = { currentUserDetails, updateInfo, changePassword };

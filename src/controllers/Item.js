@@ -33,6 +33,8 @@ const createItem = async (req, res) => {
     const { error } = itemValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    // name.trim(), findByName... await...save
+
     // Create item, append user ID and store in database.
     const item = new Item({ ...req.body, user: req.user.id });
     await item.save();
@@ -53,6 +55,7 @@ const updateItem = async (req, res) => {
     if (!item)
       return res.status(404).json({ status: "fail", msg: "Item not found!" });
 
+    // if (req.user != item.id)
     await item.save();
     res.status(200).json({
       status: "success",
@@ -64,9 +67,6 @@ const updateItem = async (req, res) => {
     console.log(err);
   }
 };
-
-// Upload Image // WORK IN PROGRESS
-// image: req.file.filename
 
 // Delete Item by ID // NOT YET COMPLETED
 const deleteItem = async (req, res) => {

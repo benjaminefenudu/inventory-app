@@ -15,15 +15,18 @@ app.use(cookieParser()); // Use cookies to deny unauthorized access
 const authorize = require("./src/middlewares/Authorize"); // Import middleware
 
 // Import Routes
-const User = require("./src/routes/User");
-const Item = require("./src/routes/Item");
+const user = require("./src/routes/User");
+const item = require("./src/routes/Item");
 const userUpdate = require("./src/routes/userUpdate");
 const dbManager = require("./src/routes/dbManager");
+const imageUpload = require("./src/routes/imageUpload");
 
-// Route Middlewares
-app.use("/user", User);
+// Unprotected route
+app.use("/user", user);
 
-app.use("/item", authorize, Item);
+// Protected routes
+app.use("/item", authorize, item);
+app.use("/item/image", authorize, imageUpload);
 app.use("/user/profile", authorize, userUpdate);
 app.use("/database", authorize, dbManager);
 
