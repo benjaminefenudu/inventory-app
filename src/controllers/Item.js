@@ -1,13 +1,12 @@
 // ITEM CRUD OPERATIONS
-const User = require("../models/User");
 const Item = require("../models/Item");
 const itemValidation = require("../validations/Item");
 
 // Get All Items
 const getAllItems = async (req, res) => {
   try {
-    const items = await Item.find({ user: req.user.id });
-    if (!items)
+    const items = await Item.find({user: req.user.id});
+    if (items.length === 0)
       return res.status(404).json({ status: "failed", msg: "No item found!" });
     res.json(items);
   } catch (err) {
@@ -89,17 +88,8 @@ const updateItem = async (req, res) => {
         .status(404)
         .json({ status: "failed", msg: `Item with ID ${_id} not found!` });
 
-    // // Check if image exists in database
-    // if 
-    // // If no image uploaded, set as "no image" otherwise return image link
-    //   req.file == undefined
-    //     ? "No image"
-    //     : `http://localhost:4000/item/image/${req.file.filename}`;
-
-    // Update item and store in database
     item = {
       ...req.body,
-      image: imageURL,
     };
     await item.save();
 
@@ -114,11 +104,11 @@ const updateItem = async (req, res) => {
   }
 };
 
-// Delete Item by ID // NOT YET COMPLETED
+// Delete Item by ID
 const deleteItem = async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete({
-      user: user.id,
+      user: req.user.id,
       _id: req.params.id,
     });
 
