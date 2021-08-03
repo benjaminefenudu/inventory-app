@@ -24,7 +24,6 @@ const dbManager = require("./src/routes/dbManager");
 
 // Unprotected route
 app.use("/user", user);
-
 // Protected routes
 app.use("/item", authorize, item);
 app.use("/user/profile", authorize, userUpdate);

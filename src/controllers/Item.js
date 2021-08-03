@@ -19,7 +19,7 @@ const getAllItems = async (req, res) => {
 // Get Specific Item
 const getSpecificItem = async (req, res) => {
   try {
-    const item = await Item.findOne({ user: req.user.id, name: req.params.id });
+    const item = await Item.findOne({ user: req.user.id, _id: req.params.id });
     if (!item)
       return res.status(404).json({
         status: "failed",
@@ -56,16 +56,22 @@ const createItem = async (req, res) => {
       });
     } else {
       // Create item, append user ID and store in database
+
+      // If no image uploaded, set as "no image" otherwise return image link
+      const imageURL = req.file == undefined
+        ? "No image"
+        : `http://localhost:4000/item/image/${req.file.filename}`;
+        
       const item = new Item({
         ...req.body,
         user: req.user.id,
-        image: `http://localhost:4000/item/image/${req.file.filename}`,
+        image: imageURL,
       });
       await item.save();
 
       res
         .status(201)
-        .json({ status: "failed", msg: "New item created.", item });
+        .json({ status: "success", msg: "New item created.", item });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -78,7 +84,9 @@ const updateItem = async (req, res) => {
     let item = await Item.find({ _id: req.params.id, user: req.user.id });
 
     if (!item)
-      return res.status(404).json({ status: "failed", msg: `Item with ID ${_id} not found!` });
+      return res
+        .status(404)
+        .json({ status: "failed", msg: `Item with ID ${_id} not found!` });
 
     item = {
       ...req.body,
@@ -106,7 +114,9 @@ const deleteItem = async (req, res) => {
     });
 
     if (!item)
-      return res.status(404).json({ status: "failed", msg: `Item with ID ${item._id} not found!` });
+      return res
+        .status(404)
+        .json({ status: "failed", msg: `Item with ID ${item._id} not found!` });
     res.status(200).json({
       status: "success",
       msg: `Item with ID ${item._id} succesfully deleted.`,

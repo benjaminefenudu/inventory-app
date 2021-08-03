@@ -8,13 +8,13 @@ const {
   deleteItem,
   getAllItems,
   getSpecificItem,
-} = require("../controllers/ItemBackup");
+} = require("../controllers/Item");
 
 // Set routes for Items CRUD processes
 router.get("/get", getAllItems);
-router.post("/create", upload.single("image"), createItem);
 router.get("/get/:id", getSpecificItem);
-router.put("/:id", upload.single("image"), updateItem);
-router.delete("/:id", deleteItem);
+router.post("/create", upload.single("image"), createItem);
+router.put("/update/:id", upload.single("image"), updateItem);
+router.delete("/delete/:id", deleteItem);
 
 module.exports = router;
