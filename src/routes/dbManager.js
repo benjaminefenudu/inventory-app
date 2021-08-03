@@ -4,7 +4,7 @@ const router = require("express").Router();
 const { getAllUsers, getSingleUser } = require("../controllers/dbManager");
 
 // Set routes for Account Administration Operations
-router.get("/getallusers", getAllUsers);
-router.get("/getsingleuser/:id", getSingleUser);
+router.get("/getusers", getAllUsers);
+router.get("/getusers/:id", getSingleUser);
 
 module.exports = router;

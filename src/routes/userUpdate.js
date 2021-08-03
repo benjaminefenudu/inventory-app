@@ -4,7 +4,7 @@ const router = require("express").Router();
 const { currentUserDetails, updateInfo, changePassword } = require("../controllers/userUpdate");
 
 // Set routes for Account Administration Operations
-router.get("/show", currentUserDetails)
+router.get("/", currentUserDetails)
 router.patch("/update", updateInfo);
 router.patch("/change-password", changePassword);
 

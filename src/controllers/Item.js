@@ -5,9 +5,11 @@ const itemValidation = require("../validations/Item");
 // Get All Items
 const getAllItems = async (req, res) => {
   try {
-    const items = await Item.find({user: req.user.id});
+    const items = await Item.find({ user: req.user.id });
     if (items.length === 0)
-      return res.status(404).json({ status: "failed", msg: "No item found!" });
+      return res
+        .status(200)
+        .json({ status: "success", msg: "There are no items!" });
     res.json(items);
   } catch (err) {
     res.status(500).json(err);
@@ -26,6 +28,7 @@ const getSpecificItem = async (req, res) => {
       });
     res.json(item);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };

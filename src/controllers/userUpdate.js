@@ -13,19 +13,18 @@ const currentUserDetails = async (req, res) => {
   }
 };
 
-// Update Account Information // NOT COMPLETED
+// Update Account Information
 const updateInfo = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate({
-      _id: req.user.id,
-      updateUser: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phoneNo: req.body.phoneNo,
-        businessName: req.body.businessName,
-      },
-    });
+    let user = await User.findById(req.user.id);
+
+    const { firstName, lastName, phoneNo, businessName } = req.body;
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (phoneNo) user.phoneNo = phoneNo;
+    if (businessName) user.businessName = businessName;
+
     await user.save();
     res.send(user);
   } catch (err) {
