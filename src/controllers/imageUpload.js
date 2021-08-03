@@ -42,16 +42,4 @@ const checkFileType = (file, cb) => {
   }
 };
 
-// // Upload single image
-// router.post("/upload/single", , (req, res) => {
-//   console.log(req.file);
-//   res.send("Single file upload success");
-// });
-
-// // Limit images to 3
-// router.post("/upload/multiple", upload.array("images", 3), (req, res) => {
-//   console.log(req.files);
-//   res.send("Multiple files upload success");
-// });
-
 module.exports = upload;

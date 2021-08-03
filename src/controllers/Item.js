@@ -58,10 +58,11 @@ const createItem = async (req, res) => {
       // Create item, append user ID and store in database
 
       // If no image uploaded, set as "no image" otherwise return image link
-      const imageURL = req.file == undefined
-        ? "No image"
-        : `http://localhost:4000/item/image/${req.file.filename}`;
-        
+      const imageURL =
+        req.file == undefined
+          ? "No image"
+          : `http://localhost:4000/item/image/${req.file.filename}`;
+
       const item = new Item({
         ...req.body,
         user: req.user.id,
@@ -88,9 +89,17 @@ const updateItem = async (req, res) => {
         .status(404)
         .json({ status: "failed", msg: `Item with ID ${_id} not found!` });
 
+    // // Check if image exists in database
+    // if 
+    // // If no image uploaded, set as "no image" otherwise return image link
+    //   req.file == undefined
+    //     ? "No image"
+    //     : `http://localhost:4000/item/image/${req.file.filename}`;
+
+    // Update item and store in database
     item = {
       ...req.body,
-      image: `http://localhost:4000/item/image/${req.file.filename}`,
+      image: imageURL,
     };
     await item.save();
 
