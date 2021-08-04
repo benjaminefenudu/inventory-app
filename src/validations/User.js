@@ -30,7 +30,7 @@ const passwordChangeValidation = (item) => {
   const schema = Joi.object({
     oldPassword: Joi.string().min(6).max(255).required(),
     newPassword: Joi.string().min(6).max(255).required(),
-    confirmPassword: Joi.string().required().valid(Joi.ref("newPassword")),
+    confirmNewPassword: Joi.string().required().valid(Joi.ref("newPassword")),
   }).unknown();
 
   return schema.validate(item);

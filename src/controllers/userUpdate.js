@@ -20,7 +20,7 @@ const updateInfo = async (req, res) => {
 
     // Limit user info changes via this route to only the following
     const { firstName, lastName, phoneNo, businessName } = req.body;
-    
+
     // User can update or leave out any of these fields
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
@@ -63,7 +63,7 @@ const changePassword = async (req, res) => {
   res.status(200).json({
     status: "success",
     msg: "Your password has been updated!",
-    result,
+    user,
   });
 };
 

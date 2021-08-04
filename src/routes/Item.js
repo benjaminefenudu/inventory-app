@@ -16,7 +16,7 @@ router.get("/get", getAllItems);
 router.get("/get/:id", getSpecificItem);
 router.delete("/delete/:id", deleteItem);
 router.post("/create", upload.single("image"), createItem);
-router.put("/update/:id", upload.single("image"), updateItem);
+router.put("/update/:id", updateItem);
 router.put("/image/:id", upload.single("image"), uploadItemImage);
 
 module.exports = router;

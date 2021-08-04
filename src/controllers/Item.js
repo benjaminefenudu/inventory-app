@@ -84,16 +84,22 @@ const createItem = async (req, res) => {
 // Update Item
 const updateItem = async (req, res) => {
   try {
-    let item = await Item.find({ _id: req.params.id, user: req.user.id });
-
+    let item = await Item.findOne({ _id: req.params.id, user: req.user.id });
+    console.log(item);
     if (!item)
       return res
         .status(404)
         .json({ status: "failed", msg: `Item with ID ${_id} not found!` });
 
-    item = {
-      ...req.body,
-    };
+    // Limit user item changes via this route to only the following
+    const { name, description, category, price, noInStock } = req.body;
+
+    // User can update or leave out any of these fields
+    if (name) item.name = name;
+    if (description) item.description = description;
+    if (category) item.category = category;
+    if (price) item.price = price;
+    if (noInStock) item.noInStock = noInStock;
     await item.save();
 
     res.status(200).json({
