@@ -1,10 +1,15 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const connectDatabase = require("./config/database");
+const {connectDatabase, generateNgrokURL } = require("./config/database");
 
-// Fetch Database and Listen
+// Generate ngrok URL, fetch database, app listen
 connectDatabase(app);
+(generateNgrokURL)()
+
+app.get("/", (req, res) => {
+    res.send("<h1>Inventory App<h1>")
+})
 
 // Parse Request Body as JSON and render static image files
 app.use(express.json());
