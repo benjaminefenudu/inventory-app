@@ -55,8 +55,6 @@ const changePassword = async (req, res) => {
 
   // Hash new password and replace
   const password = await bcrypt.hash(req.body.newPassword, 12);
-
-  user = await User.findById(req.user.id);
   user.password = password;
   await user.save();
 
